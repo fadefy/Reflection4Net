@@ -48,19 +48,25 @@
     <Compile Include="Accessor\AdaptedNameAttribute.cs" />
     <Compile Include="Accessor\AdaptedNameIgnoreAttribute.cs" />
     <Compile Include="Accessor\AdaptedPropertyAccessor.cs" />
+    <Compile Include="Accessor\IPropertyAccessor.cs" />
+    <Compile Include="Accessor\IPropertyAdaptor.cs" />
     <Compile Include="Cache\DictionaryCache.cs" />
     <Compile Include="Accessor\DynamicSwitchPropertyAccessorDelegateBuilder.cs" />
     <Compile Include="Conversion\MemberwiseConverter.cs" />
-    <Compile Include="Extension\ObjectExtension.cs" />
-    <Compile Include="Accessor\IPropertyAccessorDelegateBuilder.cs" />
+    <Compile Include="Extensions\FunctionExtention.cs" />
+    <Compile Include="Extensions\ObjectExtension.cs" />
+    <Compile Include="Accessor\IDynamicPropertyAccessorDelegateBuilder.cs" />
     <Compile Include="Accessor\IAccessorFactory.cs" />
     <Compile Include="Cache\ICache.cs" />
-    <Compile Include="Accessor\IPropertyAccessor.cs" />
+    <Compile Include="Accessor\IDynamicPropertyAccessor.cs" />
     <Compile Include="Conversion\ITypeConverter.cs" />
     <Compile Include="Accessor\LateBoundPropertyAccessorDelegateBuilder.cs" />
+    <Compile Include="Extensions\TypeOf.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Reflection\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

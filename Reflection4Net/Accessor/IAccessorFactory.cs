@@ -10,13 +10,13 @@
         /// </summary>
         /// <param name="value"></param>
         /// <returns>An instance of IPropertyAdapter.</returns>
-        IPropertyAccessor GetAccessor(object value);
+        IDynamicPropertyAccessor GetAccessor(object value);
 
         /// <summary>
         /// Gets an IPropertyAccessor by a Type.
         /// </summary>
         /// <typeparam name="T">The generic type to get IPropertyAccessor from.</typeparam>
         /// <returns>An instance of IPropertyAccessor.</returns>
-        IPropertyAccessor GetAccessor<T>();
+        IDynamicPropertyAccessor GetAccessor<T>();
     }
 }

@@ -6,9 +6,9 @@ namespace Reflection4Net.Accessor
     /// <summary>
     /// Provides the capability to get property value from an object by a given name.
     /// </summary>
-    public class AdaptedPropertyAccessor<T> : IPropertyAccessor
+    public class AdaptedPropertyAccessor<T> : IDynamicPropertyAccessor
     {
-        private IPropertyAccessorDelegateBuilder delegateBuilder = new DynamicSwitchPropertyAccessorDelegateBuilder();
+        private IDynamicPropertyAccessorDelegateBuilder delegateBuilder = new DynamicSwitchPropertyAccessorDelegateBuilder();
         private static Lazy<Func<T, string, object>> memberGetter;
         private static Lazy<Func<T, string, object, bool>> memberSetter;
 
@@ -24,7 +24,7 @@ namespace Reflection4Net.Accessor
         /// <summary>
         /// 
         /// </summary>
-        public IPropertyAccessorDelegateBuilder DelegateBuilder
+        public IDynamicPropertyAccessorDelegateBuilder DelegateBuilder
         {
             get { return delegateBuilder; }
             set

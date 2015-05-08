@@ -5,7 +5,7 @@ namespace Reflection4Net.Accessor
     /// <summary>
     /// 
     /// </summary>
-    public interface IPropertyAccessorDelegateBuilder
+    public interface IDynamicPropertyAccessorDelegateBuilder
     {
         /// <summary>
         /// 

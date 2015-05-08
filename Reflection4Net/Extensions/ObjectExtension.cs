@@ -4,13 +4,32 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Reflection4Net.Extension
+namespace Reflection4Net.Extensions
 {
     /// <summary>
     /// 
     /// </summary>
     public static class ObjectExtension
     {
+        private static Func<object, IDynamicPropertyAccessor> _getPropertyAccessor = AdaptedAccessorFactory.Instance.GetAccessor;
+
+        public static Func<object, IDynamicPropertyAccessor> GetPropertyAccessor
+        {
+            get { return _getPropertyAccessor; }
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException("value");
+
+                _getPropertyAccessor = value;
+            }
+        }
+
+        public static IDynamicPropertyAccessor GetAccessor(this object instance)
+        {
+            return GetPropertyAccessor(instance);
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -18,12 +37,12 @@ namespace Reflection4Net.Extension
         /// <param name="propertyName"></param>
         /// <param name="accessor"></param>
         /// <returns></returns>
-        public static object GetProperty(this object instance, string propertyName, IPropertyAccessor accessor = null)
+        public static object GetProperty(this object instance, string propertyName, IDynamicPropertyAccessor accessor = null)
         {
             if (String.IsNullOrWhiteSpace(propertyName))
                 throw new ArgumentNullException("propertyName");
 
-            return HandleNullValue((accessor ?? AdaptedAccessorFactory.Instance.GetAccessor(instance)).GetProperty(instance, propertyName), instance, propertyName);
+            return HandleNullValue((accessor ?? GetPropertyAccessor(instance)).GetProperty(instance, propertyName), instance, propertyName);
         }
 
         /// <summary>
@@ -33,7 +52,7 @@ namespace Reflection4Net.Extension
         /// <param name="accessor"></param>
         /// <param name="propertyNames"></param>
         /// <returns></returns>
-        public static object GetProperty(this object instance, IPropertyAccessor accessor = null, params string[] propertyNames)
+        public static object GetProperty(this object instance, IDynamicPropertyAccessor accessor = null, params string[] propertyNames)
         {
             if (propertyNames == null || propertyNames.Length == 0)
                 throw new ArgumentNullException("propertyNames");
@@ -61,7 +80,7 @@ namespace Reflection4Net.Extension
         /// <param name="propertyName"></param>
         /// <param name="accessor"></param>
         /// <returns></returns>
-        public static object GetProperty<T>(this T instance, string propertyName, IPropertyAccessor accessor = null)
+        public static object GetProperty<T>(this T instance, string propertyName, IDynamicPropertyAccessor accessor = null)
         {
             if (String.IsNullOrWhiteSpace(propertyName))
                 throw new ArgumentNullException("propertyName");
@@ -78,7 +97,7 @@ namespace Reflection4Net.Extension
         /// <param name="value"></param>
         /// <param name="accessor"></param>
         /// <returns></returns>
-        public static bool SetProperty<T>(this T instance, string propertyName, object value, IPropertyAccessor accessor = null)
+        public static bool SetProperty<T>(this T instance, string propertyName, object value, IDynamicPropertyAccessor accessor = null)
         {
             if (String.IsNullOrWhiteSpace(propertyName))
                 throw new ArgumentNullException("propertyName");
@@ -94,7 +113,7 @@ namespace Reflection4Net.Extension
         /// <param name="value"></param>
         /// <param name="accessor"></param>
         /// <returns></returns>
-        public static bool SetProperty(this object instance, string propertyName, object value, IPropertyAccessor accessor = null)
+        public static bool SetProperty(this object instance, string propertyName, object value, IDynamicPropertyAccessor accessor = null)
         {
             if (String.IsNullOrWhiteSpace(propertyName))
                 throw new ArgumentNullException("propertyName");

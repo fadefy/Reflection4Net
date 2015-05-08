@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reflection4Net.Accessor;
-using Reflection4Net.Extension;
+using Reflection4Net.Extensions;
 using Reflection4Net.Test.Model;
 using Reflection4Net.Test.Util;
 using System;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reflection4Net.Extension;
+using Reflection4Net.Extensions;
 using Reflection4Net.Test.Model;
 
 namespace Reflection4Net.Test

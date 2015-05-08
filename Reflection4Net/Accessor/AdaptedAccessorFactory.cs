@@ -20,7 +20,7 @@ namespace Reflection4Net.Accessor
         /// <summary>
         /// Use RuntimeTypeHandle instead of Type to reduce heap memory usage.
         /// </summary>
-        private static ICache<RuntimeTypeHandle, IPropertyAccessor> propertyAdapters = new DictionaryCache<RuntimeTypeHandle, IPropertyAccessor>();
+        private static ICache<RuntimeTypeHandle, IDynamicPropertyAccessor> propertyAdapters = new DictionaryCache<RuntimeTypeHandle, IDynamicPropertyAccessor>();
 
         private AdaptedAccessorFactory() {  }
 
@@ -32,7 +32,7 @@ namespace Reflection4Net.Accessor
         /// <summary>
         /// 
         /// </summary>
-        public static ICache<RuntimeTypeHandle, IPropertyAccessor> PropertyAccessorCache
+        public static ICache<RuntimeTypeHandle, IDynamicPropertyAccessor> PropertyAccessorCache
         {
 
             get { return propertyAdapters; }
@@ -57,7 +57,7 @@ namespace Reflection4Net.Accessor
         /// </summary>
         /// <param name="value"></param>
         /// <returns>An instance of IPropertyAccessor.</returns>
-        public IPropertyAccessor GetAccessor(object value)
+        public IDynamicPropertyAccessor GetAccessor(object value)
         {
             return GetPropertyAccessor(value.GetType());
         }
@@ -67,10 +67,10 @@ namespace Reflection4Net.Accessor
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public IPropertyAccessor GetAccessor<T>()
+        public IDynamicPropertyAccessor GetAccessor<T>()
         {
             var type = typeof(T);
-            IPropertyAccessor adapter;
+            IDynamicPropertyAccessor adapter;
             lock (propertyAdapters)
             {
                 if (!propertyAdapters.TryGetValue(type.TypeHandle, out adapter))
@@ -87,9 +87,9 @@ namespace Reflection4Net.Accessor
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        private static IPropertyAccessor GetPropertyAccessor(Type type)
+        private static IDynamicPropertyAccessor GetPropertyAccessor(Type type)
         {
-            IPropertyAccessor adapter;
+            IDynamicPropertyAccessor adapter;
             lock (propertyAdapters)
             {
                 if (!propertyAdapters.TryGetValue(type.TypeHandle, out adapter))
@@ -101,15 +101,15 @@ namespace Reflection4Net.Accessor
             return adapter;
         }
 
-        private static IPropertyAccessor InitializeAccessor(Type type)
+        private static IDynamicPropertyAccessor InitializeAccessor(Type type)
         {
-            var adapter = Activator.CreateInstance(typeof(AdaptedPropertyAccessor<>).MakeGenericType(type)) as IPropertyAccessor;
+            var adapter = Activator.CreateInstance(typeof(AdaptedPropertyAccessor<>).MakeGenericType(type)) as IDynamicPropertyAccessor;
             propertyAdapters.Cache(type.TypeHandle, adapter);
 
             return adapter;
         }
 
-        private static IPropertyAccessor InitializeAccessor<T>()
+        private static IDynamicPropertyAccessor InitializeAccessor<T>()
         {
             var adapter = new AdaptedPropertyAccessor<T>();
             propertyAdapters.Cache(typeof(T).TypeHandle, adapter);

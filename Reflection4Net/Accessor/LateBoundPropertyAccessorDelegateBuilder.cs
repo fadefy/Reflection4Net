@@ -7,7 +7,7 @@ namespace Reflection4Net.Accessor
     /// <summary>
     /// 
     /// </summary>
-    public class LateBoundPropertyAccessorDelegateBuilder : IPropertyAccessorDelegateBuilder
+    public class LateBoundPropertyAccessorDelegateBuilder : IDynamicPropertyAccessorDelegateBuilder
     {
         private class AccessorDelegateCache<T>
         {

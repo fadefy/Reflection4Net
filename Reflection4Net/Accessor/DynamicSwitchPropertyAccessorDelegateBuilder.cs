@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
@@ -10,7 +11,7 @@ namespace Reflection4Net.Accessor
     /// <summary>
     /// 
     /// </summary>
-    public class DynamicSwitchPropertyAccessorDelegateBuilder : IPropertyAccessorDelegateBuilder
+    public class DynamicSwitchPropertyAccessorDelegateBuilder : IDynamicPropertyAccessorDelegateBuilder
     {
         /// <summary>
         /// 
@@ -121,11 +122,7 @@ namespace Reflection4Net.Accessor
             var property = Expression.Property(instance, propertyInfo.Name);
             if (!String.IsNullOrEmpty(propertyPair.Value))
             {
-                var paths = propertyPair.Value.Split('.');
-                foreach (var path in paths)
-                {
-                    property = Expression.Property(property, path);
-                }
+                property = propertyPair.Value.Split('.').Aggregate(property, (p, path) => Expression.Property(p, path));
             }
 
             return property;
@@ -133,6 +130,7 @@ namespace Reflection4Net.Accessor
 
         private static IEnumerable<KeyValuePair<int, string>> GetPropertyNamesHashes(PropertyInfo propertyInfo)
         {
+            TypeDescriptor.GetProperties(propertyInfo.ReflectedType);
             var isIgnored = propertyInfo.GetCustomAttributes(typeof(AdaptedNameIgnoreAttribute), true).Any();
             if (!isIgnored)
             {
