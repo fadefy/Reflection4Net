@@ -20,19 +20,19 @@ namespace Reflection4Net.Test
             var classSpecifiedAdapter = AdaptedAccessorFactory.Instance.GetAccessor(model);
             var globalTarget = String.Empty;
 
-            var timeDynamic = new TestTimer(() =>
+            var timeDynamic = new TestTimer(n =>
             {
                 globalTarget = classSpecifiedAdapter.GetProperty(model, "Title").ToNullableString();
             }).TimeForTimes(time);
             Assert.AreEqual(name, globalTarget);
 
-            var timeStatic = new TestTimer(() =>
+            var timeStatic = new TestTimer(n =>
             {
                 globalTarget = model.Name;
             }).TimeForTimes(time);
             Assert.AreEqual(name, globalTarget);
 
-            var timeRandomClass = new TestTimer(() =>
+            var timeRandomClass = new TestTimer(n =>
             {
                 globalTarget = model.GetProperty("Title").ToNullableString();
             }).TimeForTimes(time);
@@ -55,13 +55,13 @@ namespace Reflection4Net.Test
             var classSpecifiedAdapter = AdaptedAccessorFactory.Instance.GetAccessor(model);
             var globalTarget = String.Empty;
 
-            var timeDynamic = new TestTimer(() =>
+            var timeDynamic = new TestTimer(n =>
             {
                 globalTarget = classSpecifiedAdapter.GetProperty(model, "Title").ToNullableString();
             }).TimeForTimes(time);
             Assert.AreEqual(name, globalTarget);
 
-            var timeDynamicMT = new TestTimer(() =>
+            var timeDynamicMT = new TestTimer(n =>
             {
                 globalTarget = classSpecifiedAdapter.GetProperty(model, "Title").ToNullableString();
             }).TimeForTimesParallel(time, 4);

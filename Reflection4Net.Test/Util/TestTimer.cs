@@ -11,11 +11,11 @@ namespace Reflection4Net.Test.Util
     /// </summary>
     public class TestTimer
     {
-        private readonly Action action;
+        private readonly Action<long> action;
         private readonly Stopwatch timer = new Stopwatch();
         private long times = 0;
 
-        public TestTimer(Action action)
+        public TestTimer(Action<long> action)
         {
             if (action == null)
                 throw new ArgumentNullException("action");
@@ -30,13 +30,13 @@ namespace Reflection4Net.Test.Util
         /// <returns></returns>
         public long TimesInTime(TimeSpan time)
         {
-            action();
+            action(0);
 
-            times = 0;
+            times = 1;
             timer.Restart();
             while (timer.Elapsed < time)
             {
-                action();
+                action(times);
                 times++;
             }
             timer.Stop();
@@ -55,7 +55,7 @@ namespace Reflection4Net.Test.Util
             if (workerCount <= 0 || workerCount > 64)
                 throw new ArgumentOutOfRangeException("workerCount", "wokerCount must between 1 and 64");
 
-            action();
+            action(0);
             times = 0;
             var cts = new CancellationTokenSource();
             var factory = new TaskFactory();
@@ -82,13 +82,13 @@ namespace Reflection4Net.Test.Util
                 throw new ArgumentOutOfRangeException("times");
 
             // Run a time to worm up.
-            action();
+            action(0);
 
             timer.Restart();
             var counter = 0;
             while (counter++ < times)
             {
-                action();
+                action(counter);
             }
             timer.Stop();
 
@@ -108,7 +108,7 @@ namespace Reflection4Net.Test.Util
             if (workerCount <= 0 || workerCount > 64)
                 throw new ArgumentOutOfRangeException("workerCount", "wokerCount must between 1 and 64");
 
-            action();
+            action(0);
             this.times = times;
             var tasks = new List<Task>(workerCount);
             for (int i = 0; i < workerCount; i++)
@@ -128,7 +128,7 @@ namespace Reflection4Net.Test.Util
         {
             while (times > 0)
             {
-                action();
+                action(times);
                 Interlocked.Decrement(ref times);
             }
         }
@@ -138,7 +138,7 @@ namespace Reflection4Net.Test.Util
             var cts = state as CancellationTokenSource;
             while (!cts.IsCancellationRequested)
             {
-                action();
+                action(times);
                 Interlocked.Increment(ref times);
             }
         }

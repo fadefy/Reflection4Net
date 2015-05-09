@@ -62,6 +62,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="AdaptedAccessorFactoryTest.cs" />
+    <Compile Include="Extensions\FunctionExtensionTests.cs" />
     <Compile Include="LateBoundAccessorBuilderTest.cs" />
     <Compile Include="Model\CategoryInfo.cs" />
     <Compile Include="Model\DataModel.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="AdaptedPropertyAccessorTest.cs" />
     <Compile Include="MultiThreadPerformanceTest.cs" />
     <Compile Include="Util\Extension.cs" />
+    <Compile Include="Util\PerformanceTestExtensions.cs" />
     <Compile Include="Util\TestTimer.cs" />
   </ItemGroup>
   <ItemGroup>

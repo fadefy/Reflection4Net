@@ -30,9 +30,9 @@ namespace Reflection4Net.Test
             FillPropertyFromDictionary(data, properties);
             var mapper = ConvertFromDictionary(Mapper.CreateMap<IDictionary, DataModel>(), p => p);
             var times = 100000;
-            var timeOfReflection = new TestTimer(() => UpdatePropertyFromDictionary(data, properties)).TimeForTimes(times);
-            var timeOfLibrary = new TestTimer(() => FillPropertyFromDictionary(data, properties)).TimeForTimes(times);
-            var timeOfMapper = new TestTimer(() => FillPropertyFromDictionaryByAutoMapper(data, properties)).TimeForTimes(times);
+            var timeOfReflection = new TestTimer(n => UpdatePropertyFromDictionary(data, properties)).TimeForTimes(times);
+            var timeOfLibrary = new TestTimer(n => FillPropertyFromDictionary(data, properties)).TimeForTimes(times);
+            var timeOfMapper = new TestTimer(n => FillPropertyFromDictionaryByAutoMapper(data, properties)).TimeForTimes(times);
 
             Assert.IsTrue(timeOfReflection > timeOfLibrary);
             Assert.IsTrue(timeOfMapper > timeOfReflection);

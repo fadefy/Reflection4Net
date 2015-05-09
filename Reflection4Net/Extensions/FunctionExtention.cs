@@ -1,5 +1,7 @@
 ﻿using Reflection4Net.Cache;
 using System;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace Reflection4Net.Extensions
 {
@@ -20,6 +22,33 @@ namespace Reflection4Net.Extensions
                 }
                 return value;
             };
+        }
+
+        public static Action<T1, T2> CastToGenericAction<T1, T2>(this Delegate actionDelegate)
+        {
+            var target = Expression.Parameter(typeof(T1), "target");
+            var value = Expression.Parameter(typeof(T2), "value");
+            var parameters = actionDelegate.Method.GetParameters();
+            if (actionDelegate.Method.IsStatic)
+            {
+                var expectedTargetType = parameters.First().ParameterType;
+                var expectedValueType = parameters.Skip(1).First().ParameterType;
+                var call = Expression.Call(actionDelegate.Method, Expression.Convert(target, expectedTargetType), Expression.Convert(value, expectedValueType));
+
+                return Expression.Lambda<Action<T1, T2>>(call, target, value).Compile();
+            }
+            else
+            {
+                var expectedValueType = parameters.First().ParameterType;
+                var call = Expression.Call(target, actionDelegate.Method, Expression.Convert(value, expectedValueType));
+
+                return Expression.Lambda<Action<T1, T2>>(call, target, value).Compile();
+            }
+        }
+
+        public static Action<T1, T2> CastAsAction<T1, T2>(this Delegate actionDelegate)
+        {
+            return (a1, a2) => actionDelegate.DynamicInvoke(a1, a2);
         }
     }
 }

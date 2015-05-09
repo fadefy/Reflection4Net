@@ -1,6 +1,7 @@
 ﻿using Reflection4Net.Cache;
 using System;
 using System.Reflection;
+using Reflection4Net.Extensions;
 
 namespace Reflection4Net.Accessor
 {
@@ -77,8 +78,8 @@ namespace Reflection4Net.Accessor
                 if (propertyInfo.CanWrite)
                 {
                     var delegateType = typeof(Action<,>).MakeGenericType(typeof(T), propertyInfo.PropertyType);
-                    var setterDelegate = Delegate.CreateDelegate(delegateType, propertyInfo.GetSetMethod());
-                    propertySetter = (i, n) => setterDelegate.DynamicInvoke(i, n);
+                    var setterDelegate = Delegate.CreateDelegate(delegateType, propertyInfo.GetSetMethod()).CastToGenericAction<T, object>();
+                    propertySetter = (i, n) => setterDelegate(i, n);
                     AccessorDelegateCache<T>.SetterCache.Cache(propertyName, propertySetter);
                     propertySetter(instance, newValue);
 
