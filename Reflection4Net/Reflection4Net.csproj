@@ -61,7 +61,9 @@
     <Compile Include="Accessor\IDynamicPropertyAccessor.cs" />
     <Compile Include="Conversion\ITypeConverter.cs" />
     <Compile Include="Accessor\LateBoundPropertyAccessorDelegateBuilder.cs" />
+    <Compile Include="Extensions\ReflectionUtils.cs" />
     <Compile Include="Extensions\TypeOf.cs" />
+    <Compile Include="Mapping\Mapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
