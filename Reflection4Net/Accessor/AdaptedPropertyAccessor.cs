@@ -12,6 +12,10 @@ namespace Reflection4Net.Accessor
         private static Lazy<Func<T, string, object>> memberGetter;
         private static Lazy<Func<T, string, object, bool>> memberSetter;
 
+        static AdaptedPropertyAccessor()
+        {
+        }
+
         /// <summary>
         /// 
         /// </summary>

@@ -1,31 +1,28 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Fasterflect;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Reflection4Net.Extensions;
+using Reflection4Net.Mapping;
 using Reflection4Net.Test.Model;
 using Reflection4Net.Test.Util;
-using Reflection4Net.Accessor;
-using Reflection4Net.Extensions;
+using ROK.Reflection.FastMembers;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections;
 using System.Reflection;
-using ROK.Reflection.FastMembers;
-using Fasterflect;
 using AMapper = AutoMapper.Mapper;
-using Reflection4Net.Mapping;
 
 namespace Reflection4Net.Test
 {
     [TestClass]
-    public class PerformanceTest
+    public class GenericDictFillingPerformanceTest
     {
         [TestMethod]
         public void CompareWithPureReflection()
         {
             var properties = new Dictionary<string, object>();
             properties.Add("Name", "Hugo");
-            properties.Add("Id", "0");
+            properties.Add("Id", 0);
             properties.Add("UpdateTime", DateTime.Now.Date);
             properties.Add("Summary", "description omit");
             var data = new DataModel();
@@ -56,7 +53,7 @@ namespace Reflection4Net.Test
         protected DataModel FillPropertyFromDictionaryByDirectCalls(DataModel data, Dictionary<string, object> properties)
         {
             data.Name = properties["Name"] as string;
-            data.Id = properties["Id"] as string;
+            data.Id = (int)properties["Id"];
             data.UpdateTime = (DateTime)properties["UpdateTime"];
             data.Summary = properties["Summary"] as string;
             return data;

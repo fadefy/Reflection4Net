@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 
@@ -22,6 +23,16 @@ namespace Reflection4Net.Extensions
             where T : Attribute
         {
             return info.GetCustomAttributes(typeof(T), true).SingleOrDefault() as T;
+        }
+
+        [Pure]
+        public static IEnumerable<FieldInfo> GetFieldsWithOut<T>(this Type type)
+            where T : Attribute
+        {
+            return from field in type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                   let attribute = field.GetCustomAttributes(typeof(T), false)
+                   where !attribute.Any()
+                   select field;
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Reflection4Net.Test.Model
         [AdaptedName("Title")]
         public string Name { get; set; }
 
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         public DateTime UpdateTime { get; set; }
 

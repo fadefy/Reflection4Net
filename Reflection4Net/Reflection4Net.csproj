@@ -50,9 +50,11 @@
     <Compile Include="Accessor\AdaptedPropertyAccessor.cs" />
     <Compile Include="Accessor\IPropertyAccessor.cs" />
     <Compile Include="Accessor\IPropertyAdaptor.cs" />
+    <Compile Include="Actors\ObjectActor.cs" />
     <Compile Include="Cache\DictionaryCache.cs" />
     <Compile Include="Accessor\DynamicSwitchPropertyAccessorDelegateBuilder.cs" />
     <Compile Include="Conversion\MemberwiseConverter.cs" />
+    <Compile Include="Extensions\ExpressionExtensions.cs" />
     <Compile Include="Extensions\FunctionExtention.cs" />
     <Compile Include="Extensions\ObjectExtension.cs" />
     <Compile Include="Accessor\IDynamicPropertyAccessorDelegateBuilder.cs" />
