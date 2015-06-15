@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -7,6 +8,9 @@ namespace Reflection4Net.Extensions
     public static class ExpressionExtensions
     {
         public static MethodInfo InstanceEqual = typeof(Object).GetMethod("Equals", BindingFlags.Static | BindingFlags.Public);
+        public static MethodInfo ReferenceEqual = typeof(Object).GetMethod("ReferenceEquals", BindingFlags.Static | BindingFlags.Public);
+        public static MethodInfo GetHash = typeof(Object).GetMethod("GetHashCode", BindingFlags.Instance | BindingFlags.Public);
+        public static Expression NullObject = Expression.Constant(new object());
 
         public static UnaryExpression GetPropertyOrFieldAsType<T>(this Expression instance, string name)
         {
@@ -43,14 +47,24 @@ namespace Reflection4Net.Extensions
             return Expression.ExclusiveOr(left, right);
         }
 
-        public static BinaryExpression Coalesce(this Expression expression, Expression nullObjectExpression)
+        public static BinaryExpression Coalesce(this Expression expression, Expression nullObjectExpression = null)
         {
-            return Expression.Coalesce(expression, nullObjectExpression);
+            return Expression.Coalesce(expression, nullObjectExpression ?? NullObject);
+        }
+
+        public static Expression HashCode(this Expression expression)
+        {
+            return GetHash.CallOn(expression);
         }
 
         public static Expression EqualTo(this Expression expression, object value)
         {
             return InstanceEqual.CallWith(expression, Expression.Constant(value));
+        }
+
+        public static Expression ReferenceEqualTo(this Expression left, Expression right)
+        {
+            return ReferenceEqual.CallWith(left, right);
         }
 
         public static Expression EqualTo(this Expression left, Expression right)
@@ -61,6 +75,31 @@ namespace Reflection4Net.Extensions
         public static Expression NotEqualTo(this Expression expression, object value)
         {
             return Expression.Not(expression.EqualTo(value));
+        }
+
+        public static Expression Throw(this Exception exception)
+        {
+            return Expression.Throw(Expression.Constant(exception));
+        }
+
+        public static Expression AssignFrom(this Expression left, Expression right)
+        {
+            return Expression.Assign(left, right);
+        }
+
+        public static Expression Then(this Expression condition, Expression ifTrue)
+        {
+            return Expression.IfThen(condition, ifTrue);
+        }
+
+        public static IEnumerable<Expression> Concat(this Expression first, Expression second)
+        {
+            return new[] { first, second };
+        }
+
+        public static Expression AsABlock(this IEnumerable<Expression> expresssions, params ParameterExpression[] variables)
+        {
+            return Expression.Block(variables, expresssions);
         }
     }
 }

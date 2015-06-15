@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 
 namespace Reflection4Net.Extensions
@@ -33,6 +34,24 @@ namespace Reflection4Net.Extensions
                    let attribute = field.GetCustomAttributes(typeof(T), false)
                    where !attribute.Any()
                    select field;
+        }
+
+        public static string GetMemberName(this Expression<Func<object>> expression)
+        {
+            var memberExpression = expression.Body as MemberExpression;
+            if (memberExpression == null && expression.Body is UnaryExpression)
+            {
+                memberExpression = (expression.Body as UnaryExpression).Operand as MemberExpression;
+            }
+            if (memberExpression == null)
+                throw new ArgumentException("expression is not a valid member expression", "expression");
+
+            return memberExpression.Member.Name;
+        }
+
+        public static object GetMemberValue(this Expression<Func<object>> expression)
+        {
+            return expression.CompileTo<Func<object>>()();
         }
     }
 }
