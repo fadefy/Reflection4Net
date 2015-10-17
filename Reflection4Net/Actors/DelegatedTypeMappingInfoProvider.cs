@@ -35,7 +35,7 @@ namespace Reflection4Net.Actors
 
         public Func<MemberInfo, TypeConverter> GetTypeConverters(Type sourceType, Type targetType)
         {
-            return m => TypeDescriptor.GetConverter(m.MemberType);
+            return m => TypeDescriptor.GetConverter(m.GetMemberType());
         }
     }
 }

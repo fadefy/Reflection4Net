@@ -17,6 +17,16 @@ namespace Reflection4Net.Extensions
             return Expression.Convert(Expression.PropertyOrField(instance, name), typeof(T));
         }
 
+        public static Expression ConvertToType(this Expression instance, Type targetType)
+        {
+            return Expression.Convert(instance, targetType);
+        }
+
+        public static MemberExpression GetPropertyOrField(this Expression instance, string name)
+        {
+            return Expression.PropertyOrField(instance, name);
+        }
+
         public static MethodCallExpression CallWith(this MethodInfo method, params Expression[] arguments)
         {
             return Expression.Call(method, arguments);

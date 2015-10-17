@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reflection4Net.Actors;
 using Reflection4Net.Test.Model;
 using Reflection4Net.Extensions;
+using System.Collections.Generic;
 
 namespace Reflection4Net.Test
 {
@@ -64,6 +65,26 @@ namespace Reflection4Net.Test
             Assert.AreEqual(source.Id, target.Id);
             Assert.AreEqual(source.Name, target.Name);
             Assert.AreEqual(source.UpdateTime, target.UpdateTime);
+        }
+
+        [TestMethod]
+        public void MapPropertyTest()
+        {
+            var actor = new MapProperty<DataModel>();
+            var map = actor.Build(infoProvider);
+
+            var target = new DataModel();
+            var source = new Dictionary<string, object>();
+
+            source.Add("Id", "3");
+            source.Add("Name", "Hugo");
+            source.Add("UpdateTime", DateTime.Now.Date.ToString("O"));
+
+            map(source, target);
+
+            Assert.AreEqual(3, target.Id);
+            Assert.AreEqual("Hugo", target.Name);
+            Assert.AreEqual(DateTime.Now.Date, target.UpdateTime);
         }
 
         [TestMethod]

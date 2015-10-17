@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Linq.Expressions;
@@ -9,6 +10,25 @@ namespace Reflection4Net.Extensions
 {
     public static class ReflectionUtils
     {
+        private static MethodInfo _getDictionaryValue;
+        private static MethodInfo _convertFrom;
+
+        static ReflectionUtils()
+        {
+            _getDictionaryValue = typeof(ReflectionUtils).GetMethod("GetDictionaryValue", BindingFlags.Static | BindingFlags.Public);
+            _convertFrom = typeof(TypeConverter).GetMethod("ConvertFrom", new[] { typeof(object) });
+        }
+
+        public static MethodInfo GetDictionaryValueMethod
+        {
+            get { return _getDictionaryValue; }
+        }
+
+        public static MethodInfo ConvertFromMethod
+        {
+            get { return _convertFrom; }
+        }
+
         public static IDictionary<string, string> GetPropertyMapBy<T>(this Type type, Func<T, string> nameExtractor)
             where T : Attribute
         {
@@ -52,6 +72,27 @@ namespace Reflection4Net.Extensions
         public static object GetMemberValue(this Expression<Func<object>> expression)
         {
             return expression.CompileTo<Func<object>>()();
+        }
+
+        public static Type GetMemberType(this MemberInfo memberInfo)
+        {
+            if (memberInfo is PropertyInfo)
+            {
+                return (memberInfo as PropertyInfo).PropertyType;
+            }
+            else if (memberInfo is FieldInfo)
+            {
+                return (memberInfo as FieldInfo).FieldType;
+            }
+            throw new InvalidOperationException(String.Format("Member {0} doesn't have a return type.", memberInfo));
+        }
+
+        public static object GetDictionaryValue(IDictionary<string, object> map, string name)
+        {
+            object value;
+            if (map.TryGetValue(name, out value))
+                return value;
+            return null;
         }
     }
 }

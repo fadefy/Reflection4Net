@@ -57,9 +57,11 @@
     <Compile Include="Actors\IOperation.cs" />
     <Compile Include="Actors\ITypeMappingInfoProvider.cs" />
     <Compile Include="Actors\DelegatedTypeMappingInfoProvider.cs" />
+    <Compile Include="Actors\MapProperty.cs" />
     <Compile Include="Cache\DictionaryCache.cs" />
     <Compile Include="Accessor\DynamicSwitchPropertyAccessorDelegateBuilder.cs" />
     <Compile Include="Conversion\MemberwiseConverter.cs" />
+    <Compile Include="Conversion\TypeDescriptorConverter.cs" />
     <Compile Include="Extensions\ArgumentsGuards.cs" />
     <Compile Include="Extensions\ExpressionExtensions.cs" />
     <Compile Include="Extensions\FunctionExtention.cs" />
