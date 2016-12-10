@@ -78,8 +78,8 @@ namespace Reflection4Net.Accessor
                 if (propertyInfo.CanWrite)
                 {
                     var delegateType = typeof(Action<,>).MakeGenericType(typeof(T), propertyInfo.PropertyType);
-                    var setterDelegate = Delegate.CreateDelegate(delegateType, propertyInfo.GetSetMethod()).CastToGenericAction<T, object>();
-                    AccessorDelegateCache<T>.SetterCache.Cache(propertyName, setterDelegate);
+                    propertySetter = Delegate.CreateDelegate(delegateType, propertyInfo.GetSetMethod()).CastToGenericAction<T, object>();
+                    AccessorDelegateCache<T>.SetterCache.Cache(propertyName, propertySetter);
                     propertySetter(instance, newValue);
 
                     return true;

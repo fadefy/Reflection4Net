@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Reflection4Net.Extensions;
 
 namespace Reflection4Net.Cache
 {
@@ -29,6 +30,8 @@ namespace Reflection4Net.Cache
 
         public void Cache(K key, V value)
         {
+            ArgumentsGuards.NotNull(() => value);
+
             cache.Add(key, value);
         }
 

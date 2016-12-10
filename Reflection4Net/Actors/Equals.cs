@@ -23,7 +23,7 @@ namespace Reflection4Net.Actors
             var neitherIsNull = x.NotEqualTo(null).AndAlso(y.NotEqualTo(null));
             var equals = Expression.Condition(x.ReferenceEqualTo(y), Expression.Constant(true), Expression.Condition(neitherIsNull, xEqualsY, Expression.Constant(false)));
 
-            Trace.Write(String.Format("Generated Equals method for type {0}: {1}", typeof(T), equals));
+            Trace.WriteLine(String.Format("Generated Equals method for type {0}: {1}", typeof(T), equals));
 
             return equals.CompileTo<Func<T, T, bool>>(x, y);
         }

@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <description>
+      High Performance Utilities for common usage of reflection.
+    </description>
+    <releaseNotes>
+    </releaseNotes>
+    <summary>
+      Reflective access to properties, method and helps for equals, hash code and object mapping.
+    </summary>
+    <language>en-US</language>
+    <projectUrl>https://github.com/fadefy/Reflection4Net</projectUrl>
+    <iconUrl>https://nuget.org/Content/Images/packageDefaultIcon-50x50.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://github.com/fadefy/Reflection4Net/blob/master/LICENSE</licenseUrl>
+    <copyright>Copyright Hugo Gu 2016</copyright>
+    <dependencies>
+        <group targetFramework="net40">
+        </group>
+    </dependencies>
+    <references></references>
+    <tags>Reflection Performance</tags>
+  </metadata>
+</package>

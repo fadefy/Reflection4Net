@@ -37,13 +37,22 @@ namespace Reflection4Net.Extensions
 
                 return Expression.Lambda<Action<T1, T2>>(call, target, value).Compile();
             }
-            else
+            else if (parameters.Length == 2)
+            {
+                var expectedValueType = parameters.First().ParameterType;
+                var call = Expression.Call(Expression.Constant(actionDelegate.Target), actionDelegate.Method, target, Expression.Convert(value, expectedValueType));
+
+                return Expression.Lambda<Action<T1, T2>>(call, target, value).Compile();
+            }
+            else if (parameters.Length == 1)
             {
                 var expectedValueType = parameters.First().ParameterType;
                 var call = Expression.Call(target, actionDelegate.Method, Expression.Convert(value, expectedValueType));
 
                 return Expression.Lambda<Action<T1, T2>>(call, target, value).Compile();
             }
+
+            throw new NotSupportedException();
         }
 
         public static Action<T1, T2> CastAsAction<T1, T2>(this Delegate actionDelegate)

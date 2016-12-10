@@ -29,14 +29,7 @@ namespace Reflection4Net.Test
             FillPropertyFromDictionaryByReflection(data, properties);
             FillPropertyFromDictionaryByLibrary(data, properties);
             var mapper = ConvertFromDictionary(AMapper.CreateMap<IDictionary, DataModel>(), p => p);
-            Mapper<Dictionary<string, object>, DataModel>.InitializePropertyMapper((dict, name) =>
-            {
-                object value;
-                if (dict.TryGetValue(name, out value))
-                    return value;
-                else
-                    return null;
-            });
+            Mapper<IDictionary<string, object>, DataModel>.InitializePropertyMapper(ReflectionUtils.GetDictionaryValue);
             var times = 100000;
             var timeOfDirect = new TestTimer(n => FillPropertyFromDictionaryByDirectCalls(data, properties)).TimeForTimes(times);
             var timeOfReflection = new TestTimer(n => FillPropertyFromDictionaryByReflection(data, properties)).TimeForTimes(times);
@@ -64,9 +57,9 @@ namespace Reflection4Net.Test
             return AMapper.Map<T>(properties);
         }
 
-        protected T FillPropertyFromDictionaryByMyMapper<T>(T data, Dictionary<string, object> properties)
+        protected T FillPropertyFromDictionaryByMyMapper<T>(T data, IDictionary<string, object> properties)
         {
-            Mapper<Dictionary<string, object>, T>.Copy(properties, data);
+            Mapper<IDictionary<string, object>, T>.Copy(properties, data);
             return data;
         }
 

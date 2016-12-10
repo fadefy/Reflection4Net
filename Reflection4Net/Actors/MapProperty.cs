@@ -27,7 +27,7 @@ namespace Reflection4Net.Actors
                               select target.AssignFrom(sourceValue.ConvertToType(member.GetMemberType()));
 
             var body = guardOfMap.Concat(guardOfObj).Concat(assignments).AsABlock();
-            Trace.Write(String.Format("Generated CopyTo method for type {0}: {1}", typeof(T), body));
+            Trace.WriteLine(String.Format("Generated CopyTo method for type {0}: {1}", typeof(T), body));
 
             return body.CompileTo<Action<IDictionary<string, object>, T>>(map, obj);
         }

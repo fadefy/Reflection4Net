@@ -22,7 +22,7 @@ namespace Reflection4Net.Actors
                               select target.AssignFrom(sourceValue);
 
             var body = guardOfX.Concat(guardOfY).Concat(assignments).AsABlock();
-            Trace.Write(String.Format("Generated CopyTo method for type {0}: {1}", typeof(T), body));
+            Trace.WriteLine(String.Format("Generated CopyTo method for type {0}: {1}", typeof(T), body));
 
             return body.CompileTo<Action<T, T>>(x, y);
         }

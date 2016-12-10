@@ -1,10 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reflection4Net.Extensions;
 using Reflection4Net.Test.Util;
 
@@ -14,6 +10,7 @@ namespace Reflection4Net.Test.Extensions
     public class FunctionExtensionTests
     {
         [TestMethod]
+        [TestCategory("Performance")]
         public void PerformanceTestOfCompiledExpressionAndDynamicInvoke()
         {
             Action<string, string> someAction = (a, b) => { a = b; };
@@ -21,8 +18,8 @@ namespace Reflection4Net.Test.Extensions
             var dynamicVersion = someAction.CastAsAction<string, object>();
 
             var perfRace = new Dictionary<string, Action<long>> {
-                {"Compiled", n => compiledVersion("Hugo", "Gu")},
-                {"Dynamic", n => dynamicVersion("Hugo", "Gu")},
+                ["Compiled"] = n => compiledVersion("Hugo", "Gu"),
+                ["Dynamic"] = n => dynamicVersion("Hugo", "Gu"),
             }.ComparePerformance(1000000);
 
             Assert.IsTrue(perfRace["Compiled"] < perfRace["Dynamic"]);

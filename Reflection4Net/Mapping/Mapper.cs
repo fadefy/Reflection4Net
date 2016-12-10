@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Reflection4Net.Extensions;
-using Reflection4Net.Accessor;
+using System.Diagnostics;
 using System.Linq.Expressions;
+using Reflection4Net.Accessor;
+using Reflection4Net.Extensions;
 
 namespace Reflection4Net.Mapping
 {
-    public class Mapper<TFrom, TTo>
+    public static class Mapper<TFrom, TTo>
     {
         private static Action<TFrom, TTo> _propertyMapper;
 
@@ -22,28 +21,46 @@ namespace Reflection4Net.Mapping
             {
                 if (!targetProperty.CanWrite)
                     continue;
+                var sourceProperty = typeof(TFrom).GetProperty(targetProperty.Name);
+                if (sourceProperty == null || !sourceProperty.CanRead)
+                    continue;
                 var targetName = targetProperty.Name;
                 var sourceName = propertyNameMap[targetName];
                 if (String.IsNullOrEmpty(sourceName))
                     continue;
-                var callToAccessor = Expression.Convert(Expression.Call(memberAccessor.Method, from, Expression.Constant(sourceName)), targetProperty.PropertyType);
+                Expression callToAccessor = null;
+                if (memberAccessor != null)
+                {
+                    callToAccessor = Expression.Convert(Expression.Call(null, memberAccessor.Method, from, Expression.Constant(sourceName)), targetProperty.PropertyType);
+                }
+                else
+                {
+                    callToAccessor = Expression.Convert(Expression.PropertyOrField(from, sourceName), targetProperty.PropertyType);
+                }
                 body.Add(Expression.Assign(Expression.Property(to, targetName), callToAccessor));
             }
+
+            Trace.WriteLine($"Generating Mapper from {body}");
 
             _propertyMapper = Expression.Lambda<Action<TFrom, TTo>>(Expression.Block(body), from, to).Compile();
         }
 
         public static Action<TFrom, TTo> PropertyMapper
         {
-            get { return _propertyMapper; }
+            get
+            {
+                if (_propertyMapper == null)
+                {
+                    InitializePropertyMapper(null);
+                }
+
+                return _propertyMapper;
+            }
         }
 
         public static void Copy(TFrom from, TTo to)
         {
-            if (_propertyMapper == null)
-                throw new InvalidOperationException("Mapper hasn't initilized.");
-
-            _propertyMapper(from, to);
+            PropertyMapper(from, to);
         }
     }
 

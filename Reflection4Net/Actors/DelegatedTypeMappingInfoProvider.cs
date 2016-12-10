@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
 using Reflection4Net.Extensions;
 
 namespace Reflection4Net.Actors
 {
-    public class DelegatedTypeMappingInfoProvider : ITypeMappingInfoProvider
+    public class DelegatedTypeMappingInfoProvider : TypeMappingInfoProviderBase
     {
+        private static ITypeMappingInfoProvider allProperties = new DelegatedTypeMappingInfoProvider(t => t.GetProperties());
+        private static ITypeMappingInfoProvider allInstanceProperties = new DelegatedTypeMappingInfoProvider(t => t.GetProperties(BindingFlags.Instance));
+        private static ITypeMappingInfoProvider allInstanceWritablePropertries = new DelegatedTypeMappingInfoProvider(t => t.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(p => p.CanWrite));
+
         protected Func<Type, IEnumerable<MemberInfo>> _memberProvider;
 
         public DelegatedTypeMappingInfoProvider(Func<Type, IEnumerable<MemberInfo>> memberProvider)
@@ -17,25 +21,27 @@ namespace Reflection4Net.Actors
             _memberProvider = memberProvider;
         }
 
-        public IEnumerable<MemberInfo> GetOperandMembers(Type sourceType, Type targetType)
+        public override IEnumerable<MemberInfo> GetOperandMembers(Type sourceType, Type targetType)
         {
             ArgumentsGuards.NotNull(() => sourceType);
             ArgumentsGuards.NotNull(() => targetType);
 
-            if (sourceType != targetType)
-                throw new NotSupportedException("sourceType and targetType should be the same for this implementation.");
-
             return _memberProvider(sourceType);
         }
 
-        public Func<MemberInfo, string> GetMemberNameMapping(Type sourceType, Type targetType)
+        public static ITypeMappingInfoProvider AllProperties
         {
-            return m => m.Name;
+            get { return allProperties; }
         }
 
-        public Func<MemberInfo, TypeConverter> GetTypeConverters(Type sourceType, Type targetType)
+        public static ITypeMappingInfoProvider AllInstanceProperties
         {
-            return m => TypeDescriptor.GetConverter(m.GetMemberType());
+            get { return allInstanceProperties; }
+        }
+
+        public static ITypeMappingInfoProvider AllInstanceWritableProperties
+        {
+            get { return allInstanceWritablePropertries; }
         }
     }
 }

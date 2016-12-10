@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Reflection4Net.Mapping;
 
 namespace Reflection4Net.Extensions
 {
@@ -119,6 +120,34 @@ namespace Reflection4Net.Extensions
                 throw new ArgumentNullException("propertyName");
 
             return (accessor ?? AdaptedAccessorFactory.Instance.GetAccessor(instance.GetType())).SetProperty(instance, propertyName, value);
+        }
+
+        public static T CopyTo<T>(this T source, T target)
+        {
+            TypeOf<T>.CopyTo(source, target);
+
+            return target;
+        }
+
+        public static T CopyFrom<T>(this T target, T source)
+        {
+            TypeOf<T>.CopyTo(source, target);
+
+            return target;
+        }
+
+        public static T MapTo<S, T>(this S source, T target)
+        {
+            Mapper<S, T>.Copy(source, target);
+
+            return target;
+        }
+
+        public static T MapFrom<S, T>(this T target, S source)
+        {
+            Mapper<S, T>.Copy(source, target);
+
+            return target;
         }
 
         /// <summary>

@@ -68,7 +68,7 @@ namespace Reflection4Net.Test
             Assert.AreEqual(name, globalTarget);
 
             // The performance is not improved too much by using multi-thread.
-            Assert.IsTrue(timeDynamic.TotalMilliseconds > timeDynamicMT.TotalMilliseconds * 1.5);
+            Assert.IsTrue(timeDynamic.TotalMilliseconds > timeDynamicMT.TotalMilliseconds);
         }
     }
 }

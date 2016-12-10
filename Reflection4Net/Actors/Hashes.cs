@@ -17,7 +17,7 @@ namespace Reflection4Net.Actors
                              select memberValue.HashCode();
             var aggregatedHash = hashValues.Aggregate((result, hash) => result.ExclusiveOr(hash));
 
-            Trace.Write(String.Format("Generated GetHash method for type {0}: {1}", typeof(T), aggregatedHash));
+            Trace.WriteLine(String.Format("Generated GetHash method for type {0}: {1}", typeof(T), aggregatedHash));
 
             return aggregatedHash.CompileTo<Func<T, int>>(instance);
         }

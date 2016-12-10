@@ -15,8 +15,8 @@ namespace Reflection4Net.Extensions
 
         static ReflectionUtils()
         {
-            _getDictionaryValue = typeof(ReflectionUtils).GetMethod("GetDictionaryValue", BindingFlags.Static | BindingFlags.Public);
-            _convertFrom = typeof(TypeConverter).GetMethod("ConvertFrom", new[] { typeof(object) });
+            _getDictionaryValue = typeof(ReflectionUtils).GetMethod(nameof(GetDictionaryValue), BindingFlags.Static | BindingFlags.Public);
+            _convertFrom = typeof(TypeConverter).GetMethod(nameof(TypeConverter.ConvertFrom), new[] { typeof(object) });
         }
 
         public static MethodInfo GetDictionaryValueMethod
@@ -56,7 +56,7 @@ namespace Reflection4Net.Extensions
                    select field;
         }
 
-        public static string GetMemberName(this Expression<Func<object>> expression)
+        public static string GetMemberName<T>(this Expression<Func<T>> expression)
         {
             var memberExpression = expression.Body as MemberExpression;
             if (memberExpression == null && expression.Body is UnaryExpression)
@@ -69,9 +69,9 @@ namespace Reflection4Net.Extensions
             return memberExpression.Member.Name;
         }
 
-        public static object GetMemberValue(this Expression<Func<object>> expression)
+        public static object GetMemberValue<T>(this Expression<Func<T>> expression)
         {
-            return expression.CompileTo<Func<object>>()();
+            return expression.CompileTo<Func<T>>()();
         }
 
         public static Type GetMemberType(this MemberInfo memberInfo)
